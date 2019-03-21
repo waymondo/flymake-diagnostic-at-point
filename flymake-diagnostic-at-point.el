@@ -110,19 +110,22 @@ Only the `background' is used in this face."
 
 (defun flymake-diagnostic-at-point-hide-posframe ()
   "Hide the current flymake diagnostic posframe."
-  (posframe-hide flymake-diagnostic-at-point-buffer-name)
-  (dolist (hook flymake-diagnostic-at-point-hide-posframe-hooks)
-    (remove-hook hook #'flymake-diagnostic-at-point-hide-posframe t)))
+  (unless (eq this-command 'flymake-diagnostic-at-point-maybe-display)
+    (posframe-hide flymake-diagnostic-at-point-buffer-name)
+    (dolist (hook flymake-diagnostic-at-point-hide-posframe-hooks)
+      (remove-hook hook #'flymake-diagnostic-at-point-hide-posframe t))))
 
 (defun flymake-diagnostic-at-point-display-minibuffer (text)
   "Display the flymake diagnostic TEXT in the minibuffer."
   (message (concat flymake-diagnostic-at-point-error-prefix text)))
 
+;;;###autoload
 (defun flymake-diagnostic-at-point-maybe-display ()
   "Display the flymake diagnostic text for the thing at point.
 
 The diagnostic text will be rendered using the function defined
 in `flymake-diagnostic-at-point-display-diagnostic-function.'"
+  (interactive)
   (when (and flymake-mode
              (get-char-property (point) 'flymake-diagnostic))
     (let ((text (flymake-diagnostic-at-point-get-diagnostic-text)))
