@@ -67,6 +67,16 @@
 Only the `background' is used in this face."
   :group 'flymake-diagnostic-at-point)
 
+(defcustom flymake-diagnostic-at-point-posframe-parameters nil
+  "Optional parameters for the created posframe."
+  :group 'flymake-diagnostic-at-point
+  :type 'list)
+
+(defcustom flymake-diagnostic-at-point-posframe-width nil
+  "Optional width for the created posframe."
+  :group 'flymake-diagnostic-at-point
+  :type 'list)
+
 (defvar-local flymake-diagnostic-at-point-timer nil
   "Timer to automatically show the error at point.")
 
@@ -92,7 +102,9 @@ Only the `background' is used in this face."
    flymake-diagnostic-at-point-buffer-name
    :string (concat flymake-diagnostic-at-point-error-prefix text)
    :background-color (face-background 'flymake-diagnostic-at-point-posframe-background-face nil t)
-   :position (point))
+   :position (point)
+   :width flymake-diagnostic-at-point-posframe-width
+   :override-parameters flymake-diagnostic-at-point-posframe-parameters)
   (dolist (hook flymake-diagnostic-at-point-hide-posframe-hooks)
     (add-hook hook #'flymake-diagnostic-at-point-hide-posframe nil t)))
 
